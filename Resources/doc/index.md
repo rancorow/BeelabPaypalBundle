@@ -136,7 +136,7 @@ class DefaultController
         $token = $request->query->get('token');
         $transaction = $this->getDoctrine()->getRepository('App:Transaction')->findOneByToken($token);
         if (null === $transaction) {
-            throw $this->createNotFoundException(sprintf('Transaction with token %s not found.', $token));
+            throw new Exception(sprintf('Transaction with token %s not found.', $token));
         }
         $transaction->cancel(null);
         $this->getDoctrine()->getManager()->flush();
@@ -152,11 +152,11 @@ class DefaultController
         $token = $request->query->get('token');
         $transaction = $this->getDoctrine()->getRepository('App:Transaction')->findOneByToken($token);
         if (null === $transaction) {
-            throw $this->createNotFoundException(sprintf('Transaction with token %s not found.', $token));
+            throw new Exception(sprintf('Transaction with token %s not found.', $token));
         }
         $service->setTransaction($transaction)->complete();
         $this->getDoctrine()->getManager()->flush();
-        if (!$transazione->isOk()) {
+        if (!$transaction->isOk()) {
             return []; // or a Response (in case of error)
         }
 
